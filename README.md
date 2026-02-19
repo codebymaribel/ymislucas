@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ymislucas.com 💸
 
-## Getting Started
+El dashboard financiero diseñado para la realidad **argentina y
+venezolana**. Controlá tu moneda local, internacional y crypto en un
+solo lugar, sin importar en qué billetera o cuenta de un tercero
+estén. Con funciones premium sin costo alguno.
 
-First, run the development server:
+## 🛠️ Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Framework:** [Next.js 15 (App Router)](https://nextjs.org/)
+- **Lenguaje:** TypeScript
+- **Estilos:** [Tailwind CSS 4](https://tailwindcss.com/)
+- **Base de Datos:** [PostgreSQL](https://www.postgresql.org/) (Dockerized)
+- **ORM:** [Drizzle ORM](https://orm.drizzle.team/)
+- **Validación:** [Zod](https://zod.dev/)
+- **Infraestructura:** VPS con Docker
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🏗️ Arquitectura
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+El proyecto sigue una estructura **orientada a features**, lo que permite un escalado robusto y desacoplado:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/features/landing`: Componentes, acciones y estilos específicos de la página de inicio.
+- `src/db`: Configuración de la base de datos y esquemas de Drizzle.
+- `src/hooks`: Lógica de React reutilizable (ej: `useScroll`).
 
-## Learn More
+## 🔐 Decisiones de Ingeniería
 
-To learn more about Next.js, take a look at the following resources:
+- **Server Actions:** Implementación de flujos de datos cliente-servidor sin APIs intermedias, optimizando el bundle y la seguridad.
+- **Robust Validation:** Uso de Zod para sanitización de datos y manejo de errores de base de datos (Postgres Error Codes) en el servidor.
+- **UI/UX Noir:** Interfaz optimizada para el enfoque fintech, utilizando `backdrop-blur` y patrones de grilla para una experiencia premium.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Instalación Local
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clonar el repo.
+2. Levantar la base de datos: `docker-compose up -d`.
+3. Instalar dependencias: `npm install`.
+4. Configurar variables de entorno (`.env`):
 
-## Deploy on Vercel
+   ```env
+   DATABASE_URL=postgres://user:password@localhost:5432/ymislucas
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Sincronizar DB: `npx drizzle-kit push`.
+6. Correr el dev server: `npm run dev`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🗄️ Gestión de Base de Datos
+
+Este proyecto utiliza **Drizzle Kit** para manejar el ciclo de vida del esquema. No se recomienda el uso de `push` en entornos que no sean de desarrollo local volátil.
+
+### Flujo de Migraciones
+
+Cada vez que modifiques el archivo `src/db/schema.ts`, debes seguir estos pasos:
+
+1. **Generar la migración**: Crea el archivo SQL con los cambios detectados.
+   ```bash
+   npx drizzle-kit generate
+   ```
+
+---
+
+Hecho con ❤️ y mucho café en Buenos Aires.
