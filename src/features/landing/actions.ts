@@ -22,7 +22,10 @@ export async function joinWaitlist(prevState: any, formData: FormData) {
   const validated = WaitlistSchema.safeParse({ email });
 
   if (!validated.success) {
-    return { error: validated.error.flatten().fieldErrors.email[0] };
+    return {
+      error:
+        validated.error.flatten().fieldErrors.email?.[0] || "Email inválido",
+    };
   }
   try {
     const result = await db
