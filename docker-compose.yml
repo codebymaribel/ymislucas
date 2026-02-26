@@ -1,15 +1,32 @@
 services:
+  app:
+    build: .
+    container_name: ymislucas-app
+    restart: always
+    ports:
+      - "80:3000"
+    environment:
+      - DATABASE_URL=postgres://pitoquito:${DB_PASSWORD}@db:5432/ymislucas
+      - RESEND_API_KEY=${RESEND_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: postgres:15-alpine
+    container_name: ymislucas-db
     restart: always
     environment:
-      POSTGRES_USER: user_admin
-      POSTGRES_PASSWORD: secret_password
-      POSTGRES_DB: ymislucas_db
-    ports:
-      - "5432:5432"
+      - POSTGRES_USER=lucas_admin
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=ymislucas
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lucas_admin -d ymislucas"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  postgres_data:
+  pgdata:
