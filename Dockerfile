@@ -11,14 +11,20 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
+
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Copy standalone Next.js build
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+
+# Copy migration files and dependencies needed to run them
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/src/db ./src/db
 COPY drizzle.config.ts ./drizzle.config.ts
 COPY package.json ./package.json
 
