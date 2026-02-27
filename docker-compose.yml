@@ -6,7 +6,7 @@ services:
     ports:
       - "80:3000"
     environment:
-      - DATABASE_URL=postgres://pitoquito:${DB_PASSWORD}@db:5432/ymislucas
+      - DATABASE_URL=postgres://lucas_admin:${DB_PASSWORD}@db:5432/ymislucas
       - RESEND_API_KEY=${RESEND_API_KEY}
     depends_on:
       db:
