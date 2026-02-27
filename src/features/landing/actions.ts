@@ -2,6 +2,7 @@
 
 import { db } from "@/src/db";
 import { waitlist } from "@/src/db/schema";
+import { Resend } from "resend";
 import { z } from "zod";
 
 const WaitlistSchema = z.object({
@@ -33,6 +34,20 @@ export async function joinWaitlist(prevState: any, formData: FormData) {
       .values({ email: validated.data.email });
     console.log("✅ Insertado en DB:", result);
 
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    if (validated.success && process.env.RESEND_API_KEY) {
+      try {
+        await resend.emails.send({
+          from: "onboarding@ymislucas.com",
+          to: "codebymaribel@gmail.com",
+          subject: "🚀 ¡Nuevo interesado en ymislucas!",
+          text: `Nuevo interesado en la lista de espera:\n\nEmail: ${validated.data.email}`,
+        });
+      } catch (error) {
+        console.error("Error al enviar email:", error);
+      }
+    }
     return { success: true, message: "¡Listo! Ya estás en la lista." };
   } catch (error: any) {
     const pgCode = error.cause?.code || error.code;
