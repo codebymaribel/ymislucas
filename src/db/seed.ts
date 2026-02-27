@@ -11,13 +11,14 @@ import bcrypt from "bcryptjs";
 async function main() {
   console.log("🌱 Seeding started...");
 
+  // Delete in reverse FK dependency order to avoid constraint violations.
+  await db.delete(transactions);
+  await db.delete(accounts);
+  await db.delete(categories);
+  await db.delete(currencies);
   await db.delete(users);
 
-  await db.delete(currencies);
-  await db.delete(categories);
-  await db.delete(accounts);
-  await db.delete(transactions);
-
+  // --- USER ---
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash("TuPasswordSegura123", salt);
 
@@ -31,6 +32,7 @@ async function main() {
 
   console.log(`👤 Usuario creado con ID: ${user.id}`);
 
+  // --- CURRENCIES ---
   await db
     .insert(currencies)
     .values([
@@ -50,7 +52,7 @@ async function main() {
       },
       {
         code: "VES",
-        name: "Bolivares",
+        name: "Bolívar Venezolano",
         symbol: "Bs",
         decimals: 2,
         type: "FIAT",
@@ -72,23 +74,114 @@ async function main() {
     ])
     .onConflictDoNothing();
 
-  const [categoriesT] = await db
+  console.log("💵 Monedas creadas.");
+
+  // --- CATEGORIES ---
+  // is_system = true marks these as global/protected — users cannot edit or delete them.
+  // user_id = null means they belong to no specific user (visible to all).
+  const systemCategories = await db
     .insert(categories)
     .values([
-      { name: "Comida", color: "#FF5733", icon: "utensils" },
-      { name: "Servicios", color: "#3357FF", icon: "bolt" },
-      { name: "Alquiler", color: "#33FF57", icon: "home" },
-      { name: "Transporte", color: "#FF33FF", icon: "bus" },
-      { name: "Streaming", color: "#FFFF33", icon: "video" },
-      { name: "Entretenimiento", color: "#FFFF33", icon: "gamepad" },
-      { name: "Salud", color: "#FF3333", icon: "heartbeat" },
-      { name: "Educación", color: "#3333FF", icon: "graduation-cap" },
-      { name: "Compras", color: "#FF9933", icon: "shopping-cart" },
-      { name: "Otros", color: "#999999", icon: "ellipsis-h" },
+      {
+        name: "Comida",
+        color: "#FF5733",
+        icon: "utensils",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Servicios",
+        color: "#3357FF",
+        icon: "bolt",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Alquiler",
+        color: "#33FF57",
+        icon: "home",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Transporte",
+        color: "#FF33FF",
+        icon: "bus",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Streaming",
+        color: "#FFFF33",
+        icon: "video",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Entretenimiento",
+        color: "#FF9933",
+        icon: "gamepad",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Salud",
+        color: "#FF3333",
+        icon: "heart",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Educación",
+        color: "#3333FF",
+        icon: "graduation-cap",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Compras",
+        color: "#FF9933",
+        icon: "shopping-cart",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Ingresos",
+        color: "#00CC66",
+        icon: "trending-up",
+        is_system: true,
+        user_id: null,
+      },
+      {
+        name: "Otros",
+        color: "#999999",
+        icon: "ellipsis-h",
+        is_system: true,
+        user_id: null,
+      },
     ])
     .returning();
 
-  const [bankAccount] = await db
+  // Example of a user-created custom category.
+  const [customCategory] = await db
+    .insert(categories)
+    .values({
+      name: "Freelance",
+      color: "#00BFFF",
+      icon: "briefcase",
+      is_system: false,
+      user_id: user.id,
+    })
+    .returning();
+
+  const categoryByName = Object.fromEntries(
+    systemCategories.map((c) => [c.name, c]),
+  );
+
+  console.log(`🗂️ ${systemCategories.length + 1} categorías creadas.`);
+
+  // --- ACCOUNTS ---
+  const [bancoveAccount, zinliAccount, galiciaAccount] = await db
     .insert(accounts)
     .values([
       {
@@ -118,17 +211,47 @@ async function main() {
     ])
     .returning();
 
-  await db.insert(transactions).values({
-    account_id: bankAccount.id,
-    category_id: categoriesT.id,
-    currency_code: "ARS",
-    amount: "4500.00",
-    description: "Cena en Palermo",
-    notes: "Validación inicial de seeding",
-  });
+  console.log("🏦 Cuentas creadas.");
 
+  // --- TRANSACTIONS ---
+  // 'date' = when the transaction actually occurred (user-reported).
+  // 'type' = INCOME | EXPENSE | TRANSFER.
+  await db.insert(transactions).values([
+    {
+      account_id: galiciaAccount.id,
+      type: "EXPENSE",
+      category_id: categoryByName["Comida"].id,
+      currency_code: "ARS",
+      amount: "-4500.00",
+      date: new Date("2025-06-10"),
+      description: "Cena en Palermo",
+      notes: "Validación inicial de seeding",
+    },
+    {
+      account_id: zinliAccount.id,
+      type: "INCOME",
+      category_id: customCategory.id,
+      currency_code: "USD",
+      amount: "150.00",
+      date: new Date("2025-06-12"),
+      description: "Pago freelance cliente",
+      notes: "Primer pago del mes",
+    },
+    {
+      account_id: bancoveAccount.id,
+      type: "EXPENSE",
+      category_id: categoryByName["Transporte"].id,
+      currency_code: "VES",
+      amount: "-800.00",
+      date: new Date("2025-06-13"),
+      description: "Metro + bus",
+      notes: null,
+    },
+  ]);
+
+  console.log("💸 Transacciones creadas.");
   console.log(
-    "✅ Seeding success: User, Accounts, Transactions, Categories and Currencies created.",
+    "✅ Seeding completado: User, Currencies, Categories, Accounts y Transactions.",
   );
 }
 

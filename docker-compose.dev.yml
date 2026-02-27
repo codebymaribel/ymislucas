@@ -1,11 +1,12 @@
 services:
   db:
     image: postgres:15-alpine
+    container_name: ymislucas-db-dev
     restart: always
     environment:
-      POSTGRES_USER: user_admin
-      POSTGRES_PASSWORD: secret_password
-      POSTGRES_DB: ymislucas_db
+      POSTGRES_USER: lucas_admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ymislucas
     ports:
       - "5432:5432"
     volumes:

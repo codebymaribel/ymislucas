@@ -1,24 +1,25 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
+import * as dotenv from "dotenv";
 import path from "path";
-import { Pool } from "pg";
+
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
 
 async function main() {
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
-
-  const db = drizzle(pool);
+  const client = postgres(process.env.DATABASE_URL!, { max: 1 });
+  const db = drizzle(client);
 
   console.log("🚀 Iniciando migración de base de datos...");
 
   await migrate(db, {
-    migrationsFolder: path.join(process.cwd(), "drizzle"),
+    migrationsFolder: path.join(process.cwd(), "src/db/migrations"),
   });
 
   console.log("✅ Migración completada con éxito.");
 
-  await pool.end();
+  await client.end();
 }
 
 main().catch((err) => {
