@@ -1,12 +1,12 @@
-import { db } from "@/src/db";
+import bcrypt from "bcryptjs";
+import { db } from "./index";
 import {
   accounts,
   categories,
   currencies,
   transactions,
   users,
-} from "@/src/db/schema";
-import bcrypt from "bcryptjs";
+} from "./schema";
 
 async function main() {
   console.log("🌱 Seeding started...");

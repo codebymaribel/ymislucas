@@ -26,6 +26,7 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/src/db ./src/db
 COPY drizzle.config.ts ./drizzle.config.ts
+COPY tsconfig.json ./tsconfig.json
 COPY package.json ./package.json
 
 EXPOSE 3000
