@@ -33,7 +33,7 @@ El proyecto sigue una estructura **orientada a features**, lo que permite un esc
 
 1. Clonar el repo.
 2. Levantar la base de datos: `docker-compose up -d`.
-3. Instalar dependencias: `npm install`.
+3. Instalar dependencias: ` pnpm install`.
 4. Configurar variables de entorno (`.env`):
 
    ```env
@@ -41,7 +41,7 @@ El proyecto sigue una estructura **orientada a features**, lo que permite un esc
    ```
 
 5. Sincronizar DB: `npx drizzle-kit push`.
-6. Correr el dev server: `npm run dev`.
+6. Correr el dev server: ` pnpm run dev`.
 
 ## 🗄️ Gestión de Base de Datos
 
