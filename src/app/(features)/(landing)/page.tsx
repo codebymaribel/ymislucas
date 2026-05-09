@@ -1,6 +1,6 @@
-import { Footer } from "@/landing/components/sections/footer";
-import { Header } from "@/landing/components/sections/header";
-import { Hero } from "@/landing/components/sections/hero";
+import { Footer } from "./components/sections/footer";
+import { Header } from "./components/sections/header";
+import { Hero } from "./components/sections/hero";
 
 export default function LandingPage() {
   return (

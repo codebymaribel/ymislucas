@@ -20,8 +20,12 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@/landing/*": ["./src/features/landing/*"],
-      "@/db": ["./src/db"]
+      "@/app/*": ["src/app/*"],
+      "@/landing/*": ["src/app/(features)/(landing)/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/signup/*":["src/app/(features)/(signup)/*"],
+      "@/db": ["./src/db"],
+      "@/components/*": ["./src/components/*"]
     }
   },
   "include": [
