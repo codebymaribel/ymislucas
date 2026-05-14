@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { getThemeAction } from "../lib/actions/theme.action";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,13 +18,18 @@ export const metadata: Metadata = {
   description: "La landing page de finanzas más honesta de latam.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = await getThemeAction();
+
+  // Resolve "system" server-side — defaults to light (OS unknown on server)
+  const resolvedClass = theme === "dark" ? "dark" : "light";
+
   return (
-    <html lang="en">
+    <html lang="en" className={resolvedClass}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
