@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "types": ["jest", "@testing-library/jest-dom"],
     "plugins": [
       {
         "name": "next"
@@ -26,7 +27,8 @@
       "@/signup/*":["src/app/(features)/(signup)/*"],
       "@/dashboard/*":["src/app/(features)/dashboard/*"],
       "@/db": ["./src/db"],
-      "@/components/*": ["./src/components/*"]
+      "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"]
     }
   },
   "include": [
