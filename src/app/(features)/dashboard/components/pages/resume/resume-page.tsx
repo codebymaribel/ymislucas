@@ -73,7 +73,7 @@ export function ResumePage() {
   const totalSpent = budgets.reduce((s, b) => s + b.spent, 0);
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="relative z-10 flex flex-col gap-6 p-6">
       {/* ── Top stat cards ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Balance */}

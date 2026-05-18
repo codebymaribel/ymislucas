@@ -32,7 +32,7 @@ const navItems: {
 
 export function Sidebar({ activePage, onNavigate }: SidebarProps) {
   return (
-    <aside className="flex flex-col w-64 min-h-screen bg-sidebar text-sidebar-foreground shrink-0 border-r border-default">
+    <aside className="relative z-10 flex flex-col w-64 min-h-screen bg-sidebar text-sidebar-foreground shrink-0 border-r border-default">
       {/* Navigation */}
       <nav className="flex-1 px-3 py-6 space-y-1">
         <p className="px-3 text-[11px] font-semibold tracking-widest text-sidebar-foreground/40 uppercase mb-3">

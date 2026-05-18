@@ -30,7 +30,7 @@ export function Header({ activePage }: HeaderProps) {
   const { title, description } = pageTitles[activePage] ?? pageTitles.resume;
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 shrink-0">
+    <header className="relative z-10 flex items-center justify-between px-6 py-4 shrink-0">
       <div>
         <h1 className="text-xl font-semibold text-foreground">{title}</h1>
         <p className="text-sm text-muted-foreground">{description}</p>
