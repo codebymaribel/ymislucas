@@ -1,16 +1,11 @@
 "use client";
-
-import { useTheme } from "@/hooks/use-theme";
+import { useTheme } from "@/context/theme-context";
 import { Theme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
 
-interface ThemeToggleProps {
-  initialTheme: Theme;
-}
-
-export function ThemeToggle({ initialTheme }: ThemeToggleProps) {
-  const { theme, setTheme, resolvedTheme } = useTheme(initialTheme);
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
 
   const options: { value: Theme; icon: React.ElementType; label: string }[] = [
     { value: "light", icon: Sun, label: "Light" },

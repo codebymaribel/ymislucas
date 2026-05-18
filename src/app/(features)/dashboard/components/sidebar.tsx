@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Theme } from "@/src/lib/theme";
 import {
   ChevronRight,
   Clock,
@@ -16,7 +15,6 @@ type Page = "resume" | "accounts" | "budget" | "pending" | "debts";
 interface SidebarProps {
   activePage: Page;
   onNavigate: (page: Page) => void;
-  initialTheme: Theme;
 }
 
 const navItems: {
@@ -32,11 +30,7 @@ const navItems: {
   { id: "pending", label: "Pendientes", icon: Clock, badge: 0 },
 ];
 
-export function Sidebar({
-  activePage,
-  onNavigate,
-  initialTheme,
-}: SidebarProps) {
+export function Sidebar({ activePage, onNavigate }: SidebarProps) {
   return (
     <aside className="flex flex-col w-64 min-h-screen bg-sidebar text-sidebar-foreground shrink-0 border-r border-default">
       {/* Navigation */}
@@ -80,7 +74,7 @@ export function Sidebar({
 
       {/* User Footer */}
       <div className="px-4 py-4 border-t border-r border-sidebar-border">
-        <ThemeToggle initialTheme={initialTheme} />
+        <ThemeToggle />
         <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-sidebar-accent cursor-pointer transition-colors">
           <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold text-sm shrink-0">
             JD

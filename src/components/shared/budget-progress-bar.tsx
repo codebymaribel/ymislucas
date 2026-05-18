@@ -1,3 +1,4 @@
+import { useTheme } from "@/context/theme-context";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 
@@ -31,6 +32,8 @@ const ANIMATION_DURATION = 1.4;
 const COLOR_RED = "#DC3318";
 const COLOR_YELLOW = "#E9D502";
 const COLOR_GREEN = "#C2E812";
+const BG_COLOR_LIGHT = "#fff";
+const BG_COLOR_DARK = "#151921";
 
 /**
  * Size config — viewBox stays fixed at 320×320.
@@ -93,6 +96,19 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
+const componentTheme = {
+  light: {
+    BG_COLOR: BG_COLOR_LIGHT,
+    TRACK_COLOR: "#E5E7EB",
+    TEXT_COLOR: "#6B7280",
+  },
+  dark: {
+    BG_COLOR: BG_COLOR_DARK,
+    TRACK_COLOR: "#101319",
+    TEXT_COLOR: "#9CA3AF",
+  },
+} as const;
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 /**
@@ -111,6 +127,8 @@ export default function BudgetProgressBar({
   className,
 }: BudgetProgressBarProps) {
   const config = SIZE_CONFIG[size];
+  const { resolvedTheme } = useTheme();
+  const theme = componentTheme[resolvedTheme as "light" | "dark"];
 
   /**
    * Normalise to [0, 1] where 1 = full budget remaining.
@@ -205,7 +223,12 @@ export default function BudgetProgressBar({
         focusable="false"
       >
         {/* Dark background circle */}
-        <circle cx={CENTER} cy={CENTER} r={TRACK_RADIUS} fill="#151921" />
+        <circle
+          cx={CENTER}
+          cy={CENTER}
+          r={TRACK_RADIUS}
+          fill={theme.BG_COLOR}
+        />
 
         {/* Track arc — full 270° sweep, muted */}
         <circle
@@ -213,7 +236,7 @@ export default function BudgetProgressBar({
           cy={CENTER}
           r={RADIUS}
           fill="none"
-          stroke="#101319"
+          stroke={theme.TRACK_COLOR}
           strokeWidth={config.strokeWidth}
           strokeLinecap="round"
           strokeDasharray={trackDashArray}
@@ -272,7 +295,7 @@ export default function BudgetProgressBar({
           textAnchor="middle"
           fontSize={config.subFontSize}
           fontFamily="var(--font-sans, sans-serif)"
-          fill="#9CA3AF"
+          fill={theme.TEXT_COLOR}
         >
           USD
         </text>
@@ -284,7 +307,7 @@ export default function BudgetProgressBar({
           textAnchor="middle"
           fontSize={config.subFontSize}
           fontFamily="var(--font-sans, sans-serif)"
-          fill="#9CA3AF"
+          fill={theme.TEXT_COLOR}
         >
           Restante
         </text>
