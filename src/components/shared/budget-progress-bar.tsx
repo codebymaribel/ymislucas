@@ -12,8 +12,8 @@ interface BudgetProgressBarProps {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 /** Hardcoded until wired to react-query */
-const CURRENT_AMOUNT = 20;
-const MAX_AMOUNT = 12800;
+const CURRENT_AMOUNT = 120;
+const MAX_AMOUNT = 1000;
 
 /** Arc geometry — all based on the fixed 320×320 viewBox */
 const VIEWBOX_SIZE = 320;
@@ -32,8 +32,21 @@ const ANIMATION_DURATION = 1.4;
 const COLOR_RED = "#DC3318";
 const COLOR_YELLOW = "#E9D502";
 const COLOR_GREEN = "#C2E812";
-const BG_COLOR_LIGHT = "#fff";
-const BG_COLOR_DARK = "#151921";
+
+const componentTheme = {
+  light: {
+    BG_COLOR: "#fff",
+    TRACK_COLOR: "#E5E7EB",
+    TEXT_COLOR: "#1C1B1A",
+    NUMBER_COLOR: "#1C1B1A",
+  },
+  dark: {
+    BG_COLOR: "#151921",
+    TRACK_COLOR: "#101319",
+    TEXT_COLOR: "#ffffff",
+    NUMBER_COLOR: "#C2E812",
+  },
+} as const;
 
 /**
  * Size config — viewBox stays fixed at 320×320.
@@ -96,19 +109,6 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-const componentTheme = {
-  light: {
-    BG_COLOR: BG_COLOR_LIGHT,
-    TRACK_COLOR: "#E5E7EB",
-    TEXT_COLOR: "#6B7280",
-  },
-  dark: {
-    BG_COLOR: BG_COLOR_DARK,
-    TRACK_COLOR: "#101319",
-    TEXT_COLOR: "#9CA3AF",
-  },
-} as const;
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
 /**
@@ -137,6 +137,10 @@ export default function BudgetProgressBar({
   const targetProgress = clamp(CURRENT_AMOUNT / MAX_AMOUNT, 0, 1);
 
   const animationRef = useRef<ReturnType<typeof animate> | null>(null);
+
+  const glowRef = useRef<SVGCircleElement>(null);
+
+  const glowAnimationRef = useRef<ReturnType<typeof animate> | null>(null);
 
   // ─── Motion values ───────────────────────────────────────────────────────
   const motionProgress = useMotionValue(0);
@@ -194,8 +198,25 @@ export default function BudgetProgressBar({
       duration: ANIMATION_DURATION,
       ease: "easeOut",
     });
+
+    // Encadenar el glow loop solo cuando termina la animación principal
+    animationRef.current.then(() => {
+      if (!glowRef.current) return;
+
+      glowAnimationRef.current = animate(
+        glowRef.current,
+        { opacity: [0.4, 1, 0.4] },
+        {
+          duration: targetProgress + 0.15,
+          repeat: Infinity,
+          ease: "easeInOut",
+        },
+      );
+    });
+
     return () => {
       animationRef.current?.stop();
+      glowAnimationRef.current?.stop();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -260,6 +281,7 @@ export default function BudgetProgressBar({
         <g aria-hidden="true">
           {/* Outer glow ring */}
           <motion.circle
+            ref={glowRef}
             cx={dotCx}
             cy={dotCy}
             r={config.dotRadius + 2}
@@ -281,9 +303,10 @@ export default function BudgetProgressBar({
           y={CENTER - 10}
           textAnchor="middle"
           fontSize={config.fontSize}
-          fontWeight={500}
+          fontWeight={600}
           fontFamily="var(--font-sans, sans-serif)"
-          fill={COLOR_GREEN}
+          className="font-mono"
+          fill={theme.NUMBER_COLOR}
         >
           {displayValue}
         </motion.text>
@@ -307,6 +330,7 @@ export default function BudgetProgressBar({
           textAnchor="middle"
           fontSize={config.subFontSize}
           fontFamily="var(--font-sans, sans-serif)"
+          className="font-black"
           fill={theme.TEXT_COLOR}
         >
           Restante
