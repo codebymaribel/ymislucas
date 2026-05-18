@@ -61,7 +61,7 @@ const SIZE_CONFIG = {
     subFontSize: 14,
   },
   md: {
-    canvas: 320,
+    canvas: 280,
     strokeWidth: 12,
     dotRadius: 8,
     fontSize: 48,

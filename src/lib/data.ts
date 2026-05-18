@@ -1,7 +1,7 @@
 export const accounts = [
   {
     id: "acc_1",
-    name: "Main Checking",
+    name: "Balance Total",
     bank: "Chase Bank",
     type: "checking",
     balance: 12850.94,
@@ -12,7 +12,7 @@ export const accounts = [
   },
   {
     id: "acc_3",
-    name: "Investment Portfolio",
+    name: "Ahorros",
     bank: "Fidelity",
     type: "investment",
     balance: 47902.79,

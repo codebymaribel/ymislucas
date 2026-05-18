@@ -25,7 +25,7 @@ const BalanceBase = ({
   isCrypto,
 }: BalanceProps) => {
   return (
-    <Card className="col-span-1 bg-card text-sidebar-foreground border-0 shadow-md">
+    <Card className="col-span-1 bg-card text-sidebar-foreground border-0 shadow-md h-40">
       <CardContent className="pt-2">
         <div className="flex items-start justify-between">
           <div>

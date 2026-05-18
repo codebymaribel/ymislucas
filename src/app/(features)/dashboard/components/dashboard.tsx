@@ -14,8 +14,8 @@ export default function Dashboard() {
       <Sidebar activePage={activePage} onNavigate={setActivePage} />
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-        <Header activePage={activePage} />
         <main className="flex-1 overflow-y-auto">
+          <Header activePage={activePage} />
           {activePage === "resume" && <ResumePage />}
         </main>
       </div>
