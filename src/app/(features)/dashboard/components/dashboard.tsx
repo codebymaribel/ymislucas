@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Header } from "./header";
-import { ResumePage } from "./pages/resume/resume-page";
+import { HomePage } from "./pages/resume/dashboard-home";
 import { Sidebar } from "./sidebar";
 type Page = "resume" | "accounts" | "budget" | "pending";
 
@@ -16,7 +16,7 @@ export default function Dashboard() {
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <main className="flex-1 overflow-y-auto">
           <Header activePage={activePage} />
-          {activePage === "resume" && <ResumePage />}
+          {activePage === "resume" && <HomePage />}
         </main>
       </div>
     </div>

@@ -47,7 +47,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-export function ResumePage() {
+export function HomePage() {
   const totalPendingAmount = pendingPayments.reduce((s, p) => s + p.amount, 0);
   const overdueCount = pendingPayments.filter(
     (p) => p.status === "overdue",

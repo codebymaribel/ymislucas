@@ -8,7 +8,7 @@ import {
 import { Progress } from "@/src/components/ui/progress";
 import { budgets } from "@/src/lib/data";
 import { memo } from "react";
-import { formatCurrency } from "./resume-page";
+import { formatCurrency } from "./dashboard-home";
 
 const BudgetResumeBase = () => {
   return (
