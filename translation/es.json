@@ -1,0 +1,23 @@
+{
+  "common": {
+    "hello": "Hola",
+    "welcome": "Bienvenido a nuestra app"
+  },
+  "nav": {
+    "home": "Resumen",
+    "accounts": "Cuentas",
+    "budget": "Presupuesto",
+    "pending": "Pendientes"
+  },
+  "dashboard": {
+    "title": "Hola Marib",
+    "description": "Vamos a ver donde andan tus lucas este"
+  },
+  "categories": {
+    "day": "Hoy",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año",
+    "custom": "Personalizado"
+  }
+}

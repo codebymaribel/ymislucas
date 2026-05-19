@@ -1,0 +1,23 @@
+{
+  "common": {
+    "hello": "Hello",
+    "welcome": "Welcome to our app"
+  },
+  "nav": {
+    "home": "Home",
+    "accounts": "Accounts",
+    "budget": "Budget",
+    "pending": "Pending"
+  },
+  "dashboard": {
+    "title": "Hi Marib",
+    "description": "Let's see where your money is going this..."
+  },
+  "categories": {
+    "day": "Today",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "custom": "Custom"
+  }
+}

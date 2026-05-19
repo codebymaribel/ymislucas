@@ -5,6 +5,7 @@ import { Button } from "@/src/components/ui/button";
 import { useDateBadgeStore } from "@/src/store/dashboard/date-store";
 import { Category } from "@/src/types/dashboard/dates";
 import { Bell, Plus, Settings } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const pageTitles: Record<string, { title: string; description: string }> = {
   resume: {
@@ -30,6 +31,7 @@ interface HeaderProps {
 }
 
 export function Header({ activePage }: HeaderProps) {
+  const t = useTranslations("dashboard");
   const { title, description } = pageTitles[activePage] ?? pageTitles.resume;
   const { availableCategories, activeCategory, actions } = useDateBadgeStore();
 
@@ -40,7 +42,7 @@ export function Header({ activePage }: HeaderProps) {
   return (
     <header className="relative z-10 flex items-center justify-between px-6 py-4 shrink-0">
       <div className="w-full">
-        <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+        <h1 className="text-xl font-semibold text-foreground">{t("title")}</h1>
         <p className="text-sm text-muted-foreground">{description}</p>
         <div className="flex flex-row gap-2 items-center mt-4 justify-center">
           {availableCategories.map((category) => {
