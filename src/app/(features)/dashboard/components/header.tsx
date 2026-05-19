@@ -1,12 +1,15 @@
 "use client";
 
+import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
-import { Bell, Settings } from "lucide-react";
+import { useDateBadgeStore } from "@/src/store/dashboard/date-store";
+import { Category } from "@/src/types/dashboard/dates";
+import { Bell, Plus, Settings } from "lucide-react";
 
 const pageTitles: Record<string, { title: string; description: string }> = {
   resume: {
     title: "Hola, Marib",
-    description: "Veamos por donde andan tus lucas hoy",
+    description: "Veamos por donde andan tus lucas este",
   },
   accounts: {
     title: "Cuentas",
@@ -28,12 +31,41 @@ interface HeaderProps {
 
 export function Header({ activePage }: HeaderProps) {
   const { title, description } = pageTitles[activePage] ?? pageTitles.resume;
+  const { availableCategories, activeCategory, actions } = useDateBadgeStore();
 
+  const updateActiveCategory = (category: Category): void => {
+    console.log("category", category);
+    actions.setActiveCategory(category);
+  };
   return (
     <header className="relative z-10 flex items-center justify-between px-6 py-4 shrink-0">
-      <div>
+      <div className="w-full">
         <h1 className="text-xl font-semibold text-foreground">{title}</h1>
         <p className="text-sm text-muted-foreground">{description}</p>
+        <div className="flex flex-row gap-2 items-center mt-4 justify-center">
+          {availableCategories.map((category) => {
+            return (
+              <button
+                key={category}
+                onClick={() => updateActiveCategory(category)}
+              >
+                {category === activeCategory ? (
+                  <Badge className="bg-accent text-sm">{category}</Badge>
+                ) : (
+                  <Badge variant="outline" className="text-sm">
+                    {category}
+                  </Badge>
+                )}
+              </button>
+            );
+          })}
+          <button>
+            <Badge variant="outline" className="text-sm bg-background">
+              Rango personalizado
+              <Plus className="w-4 h-4" />
+            </Badge>
+          </button>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">
